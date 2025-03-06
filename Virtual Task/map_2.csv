@@ -1,0 +1,12 @@
+parameter,value
+baseline_pressure_value,80
+at_collision_vibration_value,30
+at_collision_vibration_duration,0.3
+at_collision_pressure_value,80
+at_collision_pressure_duration,-1
+force_to_pressure_min,120
+force_to_pressure_max,200
+force_to_vibration_min,0
+force_to_vibration_max,80
+pump_initial_offset,0
+vibration_offset, 2
