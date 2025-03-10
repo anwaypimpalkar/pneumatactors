@@ -16,7 +16,7 @@ def load_config(filename="config.csv"):
         for row in reader:
             key, value = row
             try:
-                config[key] = float(value)  # Force numeric values to be float
+                config[key] = float(value)  # F orce numeric values to be float
             except ValueError:
                 config[key] = value  # Keep as string if conversion fails
     return config
