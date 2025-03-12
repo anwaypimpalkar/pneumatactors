@@ -4,8 +4,14 @@ import math
 import time
 import csv
 import threading
-from aardvark_api.python.aardvark_py import *
+import platform
 
+if platform.system() == "Darwin":  # macOS
+    from aardvark_api_mac.python.aardvark_py import *
+elif platform.system() == "Windows":
+    from aardvark_api_windows.python.aardvark_py import *
+else:
+    raise RuntimeError("Need to download OS-specific Aardvark API.")
 
 # Function to load variables from CSV
 def load_config(filename="config.csv"):
