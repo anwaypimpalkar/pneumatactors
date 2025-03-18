@@ -5,6 +5,7 @@ import time
 import csv
 import threading
 import platform
+from scipy.signal import butter, filtfilt
 
 if platform.system() == "Darwin":  # macOS
     from aardvark_api_mac.python.aardvark_py import *
@@ -14,18 +15,15 @@ else:
     raise RuntimeError("Need to download OS-specific Aardvark API.")
 
 import os
-
 # Set QUARC DLL Path before importing Quanser modules
 quarc_dll_path = r"C:\Program Files\Quanser\QUARC"
 os.add_dll_directory(quarc_dll_path)
+from quanser.hardware import HIL, HILError
 
 import time
 import numpy as np
 import threading
-from quanser.hardware import HIL, HILError
 from collections import deque
-from scipy.signal import butter, filtfilt
-
 
 # Constants
 BOARD_TYPE = "qpid_e"
@@ -34,7 +32,11 @@ FREQUENCY = 1e5  # Hz
 INPUT_CHANNELS = np.array([1, 2], dtype=np.uint32)  # FLEXION_EMG (Ch 1), EXTENSION_EMG (Ch 2)
 
 # Shared Data
-latest_emg = np.zeros(len(INPUT_CHANNELS))  # Latest EMG values (Flexion, Extension)
+latest_emg = np.zeros(len(INPUT_CHANNELS))  # Raw EMG
+processed_emg = np.zeros(len(INPUT_CHANNELS))  # Filtered EMG
+lock_emg = threading.Lock()
+lock_processed = threading.Lock()
+lock_i2c = threading.Lock()
 lock = threading.Lock()
 WINDOW_SIZE = 20  # Number of samples needed before filtering
 emg_window_buffer = {ch: deque(maxlen=WINDOW_SIZE) for ch in range(len(INPUT_CHANNELS))}
@@ -52,7 +54,7 @@ def collect_emg_data():
     try:
         while True:
             card.read_analog(INPUT_CHANNELS, len(INPUT_CHANNELS), input_buffer)
-            with lock:
+            with lock_emg:
                 latest_emg[:] = input_buffer  # Update shared EMG array
             time.sleep(period)  # Maintain sampling rate
     except KeyboardInterrupt:
@@ -62,9 +64,10 @@ def collect_emg_data():
             card.close()
         print("DAQ device closed.")
 
+
 def read_latest_emg():
     """Function to safely read the latest EMG data."""
-    with lock:
+    with lock_emg:
         return np.copy(latest_emg)  # Return a copy to prevent modification during read
 
 def butter_lowpass_filter(data, cutoff=10, fs=1000, order=4):
@@ -76,27 +79,49 @@ def butter_lowpass_filter(data, cutoff=10, fs=1000, order=4):
     b, a = butter(order, normal_cutoff, btype='low', analog=False)
     return filtfilt(b, a, data)
 
-def process_emg():
-    """Safely reads, rectifies, and filters EMG data in real-time."""
-    with lock:
-        latest_read_emg = np.copy(latest_emg)  # Read safely from shared EMG data
-    
-    # Update rolling buffer with new EMG values
-    for i, val in enumerate(latest_read_emg):
-        emg_window_buffer[i].append(np.abs(val))  # Rectify and store
+def emg_processing_thread():
+    """Thread function to process EMG data."""
+    global processed_emg
 
-    # Ensure enough data in buffer before filtering
-    if all(len(emg_window_buffer[i]) >= WINDOW_SIZE for i in range(len(INPUT_CHANNELS))):
-        filtered_values = np.array([
-            butter_lowpass_filter(list(emg_window_buffer[i])) for i in range(len(INPUT_CHANNELS))
-        ])
-        return np.mean(filtered_values, axis=1)  # Return the average processed value
-    
-    return np.zeros(len(INPUT_CHANNELS))  # Return zeroes until enough data is collected
+    while True:
+        with lock_emg:
+            latest_read_emg = np.copy(latest_emg)
 
-# Start EMG data collection in a separate thread
-data_thread = threading.Thread(target=collect_emg_data, daemon=True)
-data_thread.start()
+        # Process EMG (rectify + filter)
+        for i, val in enumerate(latest_read_emg):
+            emg_window_buffer[i].append(np.abs(val))
+
+        if all(len(emg_window_buffer[i]) >= max(WINDOW_SIZE, 3 * 4) for i in range(len(INPUT_CHANNELS))):
+            filtered_values = np.array([
+                butter_lowpass_filter(list(emg_window_buffer[i]))[-1]  # Extract the latest filtered value
+                for i in range(len(INPUT_CHANNELS))
+            ])
+            with lock_processed:
+                processed_emg[:] = filtered_values  # Store processed EMG
+        else:
+            with lock_processed:
+                processed_emg[:] = np.zeros(len(INPUT_CHANNELS))
+
+        time.sleep(0.001)  # Small delay to allow updates
+
+def i2c_control_thread():
+    """Thread function for handling I2C communication."""
+    global mapped_value
+
+    while True:
+        with lock_processed:
+            flexion_emg = processed_emg[0]  # Read processed EMG safely
+
+        mapped_value = map_range(flexion_emg, in_min=0, in_max=5, out_min=0, out_max=block_move_range)
+
+        # Compute pump pressure
+        left_display_x, right_display_x = handle_input()
+
+        with lock_i2c:
+            check_collision()  # Handles all I2C communication
+
+        time.sleep(0.001)  # Adjust based on system latency
+
 
 # Function to load variables from CSV
 def load_config(filename="config.csv"):
@@ -130,10 +155,8 @@ def load_mapping_config(filename=config["map_file"]):
                 mapping_config[key] = value  # Keep as string if conversion fails
     return mapping_config
 
-
 # Load configuration files
 mapping_config = load_mapping_config()  # Load mapping config
-
 
 # Initialize pygame
 pygame.init()
@@ -249,7 +272,7 @@ def handle_input():
     global mapped_value
 
     # Read latest EMG data
-    flexion_emg = process_emg()[0]  # Fetch flexion & extension EMG
+    flexion_emg = processed_emg[0]  # Fetch flexion & extension EMG
 
     # Map the EMG value [0,5] to slider range [-slider_granularity, slider_granularity]
     mapped_value = map_range(flexion_emg, in_min=0, in_max=5, out_min = 0, out_max= block_move_range)
@@ -660,18 +683,27 @@ def draw_glass_effect(surface, x, y, width, height):
 
     surface.blit(glass_surface, (x, y))  # Render onto main screen
 
+# Initialize Threads
+emg_thread = threading.Thread(target=collect_emg_data, daemon=True)
+process_thread = threading.Thread(target=emg_processing_thread, daemon=True)
+i2c_thread = threading.Thread(target=i2c_control_thread, daemon=True)
 
+# Start simulation
 reset_sim()
 clock = pygame.time.Clock()
-
-# Game loop
 running = True
+
+# Start Threads
+emg_thread.start()
+process_thread.start()
+i2c_thread.start()
+
 while running:
-    time_delta = clock.tick(60) / 1000.0
+    time_delta = clock.tick(60) / 1000.0  # Limit FPS to 60
 
-    screen.fill((0, 0, 0))
+    screen.fill((0, 0, 0))  # Clear screen
 
-    # Process events early to ensure UI responsiveness
+    # Process events (quit, reset, etc.)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -682,73 +714,51 @@ while running:
 
     manager.update(time_delta)
 
-    # Only update simulation if the game is not paused
+    # Only update physics if the game isn't paused
     if not game_paused:
-        # Read slider input and update block positions
-        # slider_value = slider.get_current_value()
-
         # Apply gravity
         ball_velocity_y += gravity
         center_y += ball_velocity_y
 
+        # Prevent ball from sinking below the ground
         if center_y >= height - radius:
             center_y = height - radius
             ball_velocity_y = 0
 
-    # Render object based on the config option
+    # Draw either a square or a circle, depending on config
     if config["render_shape"] == "square":
-        square_size = radius * 2
-        square_x = center_x - radius
-        square_y = center_y - radius
-        draw_glass_effect(screen, square_x, square_y, square_size, square_size)
+        draw_glass_effect(screen, center_x - radius, center_y - radius, radius * 2, radius * 2)
     else:
-        pygame.draw.circle(
-            screen, red, (center_x, center_y), radius
-        )  # Default is a circle
+        pygame.draw.circle(screen, red, (center_x, center_y), radius)
 
-    # Inside the game loop, before drawing the blocks:
+    # Retrieve latest block positions using processed EMG data
     left_display_x, right_display_x = handle_input()
 
-    # Render blocks at adjusted display positions (preventing overlap)
-    pygame.draw.rect(
-        screen, bluegrey, (left_display_x, left_block_rect.y, block_width, block_height)
-    )
-    pygame.draw.rect(
-        screen,
-        bluegrey,
-        (right_display_x, right_block_rect.y, block_width, block_height),
-    )
+    # Render block positions
+    pygame.draw.rect(screen, bluegrey, (left_display_x, left_block_rect.y, block_width, block_height))
+    pygame.draw.rect(screen, bluegrey, (right_display_x, right_block_rect.y, block_width, block_height))
 
-    # Check for collisions and slow down ball if needed
-    check_collision()
-
-    # Check if the object has dropped
+    # Check for object drop or success
     check_if_dropped()
-
-    # Track success if the game is not paused
     if not game_paused:
         check_success(time_delta)
 
-    # If success is achieved, display the message
+    # Display overlays if needed
     if success_achieved:
         display_success_message()
-
-    # If the object is dropped, show the overlay
     if object_dropped:
         display_drop_message()
-
-    # If broken, display the message overlay
     if object_broken:
         display_break_message()
 
+    # Draw UI
     manager.draw_ui(screen)
     pygame.display.flip()
 
+# Cleanup before exiting
 reset_all_devices(baseline_pressure=False)
-
-# Close Aardvark before quitting
 if aardvark_handle > 0:
     aa_close(aardvark_handle)
     print("Aardvark device closed.")
-
 pygame.quit()
+

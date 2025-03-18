@@ -15,7 +15,7 @@ from quanser.hardware import HIL, HILError
 BOARD_TYPE = "qpid_e"
 BOARD_IDENTIFIER = "0"
 FREQUENCY = 1000  # Hz (Sampling frequency)
-DURATION = 2  # Rolling window duration (seconds)
+DURATION = 0.5  # Rolling window duration (seconds)
 SAMPLES = int(FREQUENCY * DURATION)  # Number of samples in rolling window
 PERIOD = 1.0 / FREQUENCY
 
@@ -37,7 +37,7 @@ card.open(BOARD_TYPE, BOARD_IDENTIFIER)
 # Setup Matplotlib figure
 fig, ax = plt.subplots()
 ax.set_xlim(-DURATION, 0)  # Rolling window of 2 seconds
-ax.set_ylim(-5, 5)  # Adjust based on expected EMG signal range
+ax.set_ylim(-0.5, 0.5)  # Adjust based on expected EMG signal range
 ax.set_xlabel("Time (s)")
 ax.set_ylabel("Voltage (V)")
 ax.set_title("Real-Time EMG Signals")
