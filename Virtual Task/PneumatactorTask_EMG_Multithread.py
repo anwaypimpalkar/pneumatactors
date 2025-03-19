@@ -1,30 +1,178 @@
+import os
 import pygame
 import pygame_gui
-import math
-import time
 import csv
 import threading
-from aardvark_api.python.aardvark_py import *
+import platform
+import time
+import threading
+from scipy.signal import butter, filtfilt, hilbert
+import pandas as pd
+import numpy as np
+from collections import deque
 
+# Set QUARC DLL Path before importing Quanser modules
+quarc_dll_path = r"C:\Program Files\Quanser\QUARC"
+os.add_dll_directory(quarc_dll_path)
 
-# Function to load variables from CSV
-def load_config(filename="config.csv"):
-    config = {}
+from quanser.hardware import HIL, HILError
+
+if platform.system() == "Darwin":  # macOS
+    from aardvark_api_mac.python.aardvark_py import *
+elif platform.system() == "Windows":
+    from aardvark_api_windows.python.aardvark_py import *
+else:
+    raise RuntimeError("Need to download OS-specific Aardvark API.")
+
+# QPIDe Constants
+BOARD_TYPE = "qpid_e"
+BOARD_IDENTIFIER = "0"
+FREQUENCY = 1e5  # Hz
+INPUT_CHANNELS = np.array([1, 2], dtype=np.uint32)  # FLEXION_EMG (Ch 1), EXTENSION_EMG (Ch 2)
+
+# Filter Parameters
+WINDOW_SIZE = 300  
+
+# Participant Parameters
+PARTICIPANT = "p01"
+participant_emg_calibration_file = f"{PARTICIPANT}/{PARTICIPANT}_calibration.csv"
+
+# Threading Tools
+raw_emg = np.zeros(len(INPUT_CHANNELS))  # Raw EMG
+processed_emg = np.zeros(len(INPUT_CHANNELS))  # Filtered EMG
+lock_raw_emg = threading.Lock()
+lock_processed_emg = threading.Lock()
+lock_i2c = threading.Lock()
+emg_window_buffer = {ch: deque(maxlen=WINDOW_SIZE) for ch in range(len(INPUT_CHANNELS))}
+
+# EMG Calibration File
+if not os.path.exists(participant_emg_calibration_file):
+    print(f"Error: File '{participant_emg_calibration_file}' not found!")
+else:
+    df_calibration = pd.read_csv(participant_emg_calibration_file)
+    emg_mean_max = df_calibration["mean_max"].values[0]
+    emg_mean_min = df_calibration["mean_min"].values[0]
+
+# Directories
+config_directory = "config"
+map_directory = "maps"
+
+# Colors
+red, white, blue, green, bluegrey = (
+    (255, 0, 0),
+    (255, 255, 255),
+    (0, 0, 255),
+    (0, 255, 0),
+    (119, 136, 153),
+)
+
+def collect_emg_data():
+    """Thread function to continuously collect EMG data."""
+    global raw_emg
+    period = 1.0 / FREQUENCY
+
+    card = HIL()
+    card.open(BOARD_TYPE, BOARD_IDENTIFIER)
+
+    qpide_input_buffer = np.zeros(len(INPUT_CHANNELS), dtype=np.float64)
+
+    try:
+        while True:
+            card.read_analog(INPUT_CHANNELS, len(INPUT_CHANNELS), qpide_input_buffer)
+            with lock_raw_emg:
+                raw_emg[:] = qpide_input_buffer
+            time.sleep(period)
+    except KeyboardInterrupt:
+        print("EMG data collection stopped.")
+    finally:
+        if card.is_valid():
+            card.close()
+        print("DAQ device closed.")
+
+def butter_lowpass_filter(data, cutoff=10, fs=1000, order=4):
+    if len(data) < (order * 3):
+        return np.mean(data) if len(data) > 0 else 0
+    nyquist = 0.5 * fs
+    normal_cutoff = cutoff / nyquist
+    b, a = butter(order, normal_cutoff, btype='low', analog=False)
+    return filtfilt(b, a, data)
+
+def rms_filter(data):
+    return np.sqrt(np.mean(np.square(data)))
+
+def hilbert_envelope_filter(data, cutoff=10, fs=1000, order=4):
+    if len(data) < (order * 3):
+        return np.mean(data) if len(data) > 0 else 0
+
+    # Compute the analytic signal using Hilbert Transform
+    analytic_signal = hilbert(data)
+    envelope = np.abs(analytic_signal)  # Envelope of the signal
+
+    # Apply a low-pass filter to smooth the envelope
+    nyquist = 0.5 * fs
+    normal_cutoff = cutoff / nyquist
+    b, a = butter(order, normal_cutoff, btype='low', analog=False)
+    filtered_envelope = filtfilt(b, a, envelope)
+    
+    return filtered_envelope[-1]
+
+def emg_processing_thread():
+    """Thread function to process EMG data."""
+    global processed_emg
+
+    while True:
+        with lock_raw_emg:
+            latest_read_emg = np.copy(raw_emg)
+
+        # Process EMG (rectify + filter)
+        for i, val in enumerate(latest_read_emg):
+            emg_window_buffer[i].append(np.abs(val))
+
+        if all(len(emg_window_buffer[i]) >= max(WINDOW_SIZE, 3 * 4) for i in range(len(INPUT_CHANNELS))):
+            filtered_values = np.array([
+                rms_filter(list(emg_window_buffer[i]))
+                for i in range(len(INPUT_CHANNELS))
+            ])
+            with lock_processed_emg:
+                processed_emg[:] = filtered_values
+        else:
+            with lock_processed_emg:
+                processed_emg[:] = np.zeros(len(INPUT_CHANNELS))
+
+        time.sleep(0.00001)
+
+def i2c_control_thread():
+    """Thread function for handling I2C communication."""
+    global mapped_value
+
+    while True:
+        with lock_processed_emg:
+            flexion_emg = processed_emg[0]  # Read processed EMG safely
+
+        mapped_value = map_range(flexion_emg, in_min=emg_mean_min, in_max=emg_mean_max, out_min=0, out_max=block_move_range)
+
+        # Compute pump pressure
+        left_display_x, right_display_x = handle_input()
+
+        with lock_i2c:
+            check_collision()  # Handles all I2C communication
+
+        time.sleep(0.001)  # Adjust based on system latency
+
+def load_config(filename):
+    task_config = {}
     with open(filename, mode="r") as file:
         reader = csv.reader(file)
-        next(reader)  # Skip header
+        next(reader)
         for row in reader:
             key, value = row
             try:
-                config[key] = float(value)  # F orce numeric values to be float
+                task_config[key] = float(value)
             except ValueError:
-                config[key] = value  # Keep as string if conversion fails
-    return config
+                task_config[key] = value
+    return task_config
 
-config = load_config()  # Load main config
-
-# Function to load mapping config from CSV
-def load_mapping_config(filename=config["map_file"]):
+def load_mapping_config(filename):
     mapping_config = {}
     with open(filename, mode="r") as file:
         reader = csv.reader(file)
@@ -39,140 +187,33 @@ def load_mapping_config(filename=config["map_file"]):
                 mapping_config[key] = value  # Keep as string if conversion fails
     return mapping_config
 
+def map_range(x, in_min, in_max, out_min, out_max):
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
-# Load configuration files
-mapping_config = load_mapping_config()  # Load mapping config
-
-
-# Initialize pygame
-pygame.init()
-
-# Load parameters from config
-dpi_scale = config["dpi_scale"]
-width, height = int(config["width"] * dpi_scale), int(config["height"] * dpi_scale)
-screen = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Pneumatactor Virtual Task")
-
-# GUI Manager
-manager = pygame_gui.UIManager((width, height))
-
-# Colors
-red, white, blue, green, bluegrey = (
-    (255, 0, 0),
-    (255, 255, 255),
-    (0, 0, 255),
-    (0, 255, 0),
-    (119, 136, 153),
-)
-
-# Font scaling from config
-font = pygame.font.SysFont(None, int(config["font_scale"] * dpi_scale))
-
-# Game parameters from config
-radius = int(config["radius"] * dpi_scale)
-block_width = int(config["block_width"] * dpi_scale)
-block_height = int(config["block_height"] * dpi_scale)
-initial_distance = radius * config["initial_distance_factor"] + block_width
-block_move_range = config["block_move_range"] * dpi_scale
-slider_granularity = config["slider_granularity"]
-gravity = config["gravity"] * dpi_scale
-speed_reduction_factor = config["speed_reduction_factor"]
-
-# I2C and hardware control from config
-VALVE_ADDRESS = int(config["VALVE_ADDRESS"])
-PUMP_ADDRESS = int(config["PUMP_ADDRESS"])
-I2C_BITRATE = int(config["I2C_BITRATE"])
-pump_initial_offset = int(config["pump_initial_offset"])
-collision_vibration = int(config["collision_vibration"])
-collision_pressure = int(config["collision_pressure"])
-collision_duration = float(config["collision_duration"])
-object_broken_threshold = int(config["object_broken_threshold"])
-success_range_low = int(config["success_range_low"])
-success_range_high = int(config["success_range_high"])
-success_duration_required = float(config["success_duration_required"])
-
-# Initialize Aardvark Device
-aardvark_handle = aa_open(0)
-
-if aardvark_handle <= 0:
-    print(f"Unable to open Aardvark device. Error code: {aardvark_handle}")
-else:
-    aa_configure(aardvark_handle, AA_CONFIG_SPI_I2C)
-    aa_i2c_bitrate(aardvark_handle, I2C_BITRATE)
-    aa_i2c_pullup(aardvark_handle, AA_I2C_PULLUP_BOTH)
-
-intersect_state = False
-game_paused = False
-object_dropped = False
-success_timer = 0
-success_achieved = False
-last_pump_value = -1
-last_frequency_value = -1
-
-# Initialize Pygame mixer for audio playback
-pygame.mixer.init()
-
-# Load sound effects
-shatter_sound = pygame.mixer.Sound("audio/glass-shatter.mp3")
-drop_sound = pygame.mixer.Sound("audio/glass-dropped.mp3")  # Load the drop sound
-
-# Track if the object has been broken
-object_broken = False
-
-slider_value = 0
-
-# Slider UI
-slider_rect = pygame.Rect(
-    (int(250 * dpi_scale), int(550 * dpi_scale)),
-    (int(300 * dpi_scale), int(20 * dpi_scale)),
-)
-slider = pygame_gui.elements.UIHorizontalSlider(
-    relative_rect=slider_rect,
-    start_value=0,
-    value_range=(-slider_granularity, slider_granularity),
-    manager=manager,
-)
-
-# Step 1: Compute block positions first
-left_block_x = (width // 2) - radius - block_width - int(initial_distance // 2)
-right_block_x = (width // 2) + radius + int(initial_distance // 2)
-
-left_block_rect = pygame.Rect(
-    left_block_x, (height // 2) - (block_height // 2), block_width, block_height
-)
-right_block_rect = pygame.Rect(
-    right_block_x, (height // 2) - (block_height // 2), block_width, block_height
-)
-
-# Step 2: Set square/circle center_x
-center_x = width // 2  # Keep X centered
-
-# Step 3: Ensure square starts EXACTLY on top of blocks
-center_y = left_block_rect.top - radius  # Align bottom of square with top of blocks
-
-
-# Function to handle slider input but prevent blocks from visually overlapping the sphere
 def handle_input():
-    global slider_value
+    """Replaces slider input with real-time Flexion EMG mapping."""
+    global mapped_value
 
-    mapped_value = (slider_value / slider_granularity) * block_move_range
+    # Read latest EMG data
+    flexion_emg = processed_emg[0]  # Fetch flexion & extension EMG
 
-    # Actual backend positions (for calculations)
+    # Map the EMG value [0,5] to slider range [-slider_granularity, slider_granularity]
+    mapped_value = map_range(flexion_emg, in_min=emg_mean_min, in_max=emg_mean_max, out_min=0, out_max=block_move_range)
+
+    # Backend block positions (for calculations)
     left_block_rect.x = left_block_x + int(mapped_value)
     right_block_rect.x = right_block_x - int(mapped_value)
 
-    # Calculate the exact stopping point at the sphere's edge
+    # Prevent overlap in rendering by stopping at sphere’s edge
     left_visual_limit = center_x - radius  # Left sphere boundary
     right_visual_limit = center_x + radius  # Right sphere boundary
 
-    # Prevent overlap in the rendering by stopping exactly at the sphere's edge
+    # Ensure smooth positioning
     left_display_x = min(left_block_rect.x, left_visual_limit - block_width)
     right_display_x = max(right_block_rect.x, right_visual_limit)
 
     return left_display_x, right_display_x
 
-
-# Function to send a number to a specific I2C address using an open Aardvark handle
 def send_number_to_address(DEVICE_ADDRESS, number):
     global aardvark_handle  # Use the already opened Aardvark device
 
@@ -194,7 +235,6 @@ def send_number_to_address(DEVICE_ADDRESS, number):
         )
     # else:
     #     print(f"Successfully sent {number} to address {hex(DEVICE_ADDRESS)}")
-
 
 def check_collision():
     """Main function to check collision, adjust ball behavior, and send feedback signals."""
@@ -218,7 +258,6 @@ def check_collision():
     # Handle object break conditions
     handle_object_break(distance_left, distance_right)
 
-
 def calculate_distances():
     """Calculate the distances between the sphere edge and the inner edges of the blocks."""
     sphere_left_x = center_x - radius
@@ -232,7 +271,6 @@ def calculate_distances():
 
     return distance_left, distance_right
 
-
 def adjust_ball_velocity(distance_left, distance_right):
     """Slow down the ball based on penetration depth when blocks enter the sphere."""
     global ball_velocity_y
@@ -244,14 +282,13 @@ def adjust_ball_velocity(distance_left, distance_right):
         )
         ball_velocity_y *= slow_factor
 
-
 def handle_pump_pressure(distance_left):
     """Compute and send the pump pressure using linear mapping, with integrated offset handling."""
     global last_pump_value
 
     # Retrieve mapping configuration values
-    min_distance = config["min_distance_to_render_feedback"]
-    max_distance = config["max_distance_to_render_feedback"]
+    min_distance = task_config["min_distance_to_render_feedback"]
+    max_distance = task_config["max_distance_to_render_feedback"]
     
     # Apply offset directly to the minimum pressure value
     min_pressure = mapping_config["force_to_pressure_min"] + mapping_config["pump_initial_offset"] + mapping_config["baseline_pressure_value"]
@@ -285,16 +322,13 @@ def handle_pump_pressure(distance_left):
             send_number_to_address(PUMP_ADDRESS, baseline_pressure)
             last_pump_value = baseline_pressure
 
-
-
-
 def handle_vibration_frequency(distance_left):
     """Compute and send the vibration frequency using linear mapping, with integrated offset handling."""
     global last_frequency_value
 
     # Retrieve mapping configuration values
-    min_distance = config["min_distance_to_render_feedback"]
-    max_distance = config["max_distance_to_render_feedback"]
+    min_distance = task_config["min_distance_to_render_feedback"]
+    max_distance = task_config["max_distance_to_render_feedback"]
 
     # Apply offset directly to the minimum and maximum vibration values
     min_vibration = mapping_config["force_to_vibration_min"] + mapping_config["vibration_offset"]
@@ -325,8 +359,6 @@ def handle_vibration_frequency(distance_left):
         if last_frequency_value != 0:
             send_number_to_address(VALVE_ADDRESS, 0)
             last_frequency_value = 0
-
-
 
 def handle_collision_feedback(distance_left, distance_right):
     """Handle collision detection and send vibration signals."""
@@ -359,21 +391,19 @@ def handle_collision_feedback(distance_left, distance_right):
     elif not is_colliding:
         intersect_state = False
 
-
 def handle_object_break(distance_left, distance_right):
     """Check if the object has broken and trigger necessary actions."""
     global object_broken, game_paused
 
     if not object_broken and (
-        distance_left < int(config["object_broken_threshold"])
-        or distance_right < int(config["object_broken_threshold"])
+        distance_left < int(task_config["object_broken_threshold"])
+        or distance_right < int(task_config["object_broken_threshold"])
     ):
         print("Object Broken!")
         shatter_sound.play()
         object_broken = True
         game_paused = True
         reset_all_devices()
-
 
 def check_success(time_delta):
     global success_timer, success_achieved, game_paused
@@ -398,7 +428,6 @@ def check_success(time_delta):
     else:
         success_timer = 0  # Reset timer if condition is not met
 
-
 def check_if_dropped():
     global object_dropped, game_paused
 
@@ -413,7 +442,6 @@ def check_if_dropped():
         object_dropped = True  # Prevent multiple triggers
         game_paused = True  # Pause simulation
         reset_all_devices()  # Send 0 to all devices
-
 
 def display_drop_message():
     message = "You dropped the object!"
@@ -437,8 +465,6 @@ def display_drop_message():
     text_rect = text_surface.get_rect(center=overlay_rect.center)
     screen.blit(text_surface, text_rect)
 
-
-# Overlay function to show "You broke the object!"
 def display_break_message():
     message = "You broke the object!"  # The text to display
     text_surface = font.render(message, True, white)
@@ -460,7 +486,6 @@ def display_break_message():
     # Center the text inside the box
     text_rect = text_surface.get_rect(center=overlay_rect.center)
     screen.blit(text_surface, text_rect)
-
 
 def display_success_message():
     message = "Success!"
@@ -484,7 +509,6 @@ def display_success_message():
     text_rect = text_surface.get_rect(center=overlay_rect.center)
     screen.blit(text_surface, text_rect)
 
-
 def reset_all_devices(baseline_pressure=True):
     """Send 0 to all relevant I2C addresses to reset devices, except keep baseline pressure."""
     global aardvark_handle
@@ -505,11 +529,10 @@ def reset_all_devices(baseline_pressure=True):
         send_number_to_address(PUMP_ADDRESS, 0)
         print("All devices reset (Pump at 0).")
 
-
 def reset_sim():
     global center_y, ball_velocity_y, left_block_rect, right_block_rect
     global intersect_state, object_broken, object_dropped, success_achieved
-    global game_paused, slider_value, success_timer
+    global game_paused, mapped_value, success_timer
 
     center_y = left_block_rect.top - radius
     ball_velocity_y = 0
@@ -519,8 +542,7 @@ def reset_sim():
     success_achieved = False  # Reset success state
     game_paused = False  # Resume updates
     success_timer = 0  # Reset success timer
-    slider_value = 0
-    slider.set_current_value(0)
+    mapped_value = 0
     left_block_rect.x = left_block_x
     right_block_rect.x = right_block_x
 
@@ -538,7 +560,6 @@ def reset_sim():
         )
         pygame.display.flip()
         time.sleep(1)
-
 
 def draw_glass_effect(surface, x, y, width, height):
     glass_color = (173, 216, 230)  # Light blue with transparency
@@ -563,21 +584,122 @@ def draw_glass_effect(surface, x, y, width, height):
 
     surface.blit(glass_surface, (x, y))  # Render onto main screen
 
+task_config = load_config(f"{config_directory}/task_config.csv")
+mapping_config = load_mapping_config(f"{map_directory}/{task_config["map_file"]}")
 
+# Initialize pygame
+pygame.init()
+
+# Load parameters from task_config
+dpi_scale = task_config["dpi_scale"]
+width, height = int(task_config["width"] * dpi_scale), int(task_config["height"] * dpi_scale)
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption(f"Pneumatactor Virtual Task: {PARTICIPANT}")
+
+# GUI Manager
+manager = pygame_gui.UIManager((width, height))
+font = pygame.font.SysFont(None, int(task_config["font_scale"] * dpi_scale))
+
+# Initialize Pygame mixer for audio playback
+pygame.mixer.init()
+shatter_sound = pygame.mixer.Sound("audio/glass-shatter.mp3")
+drop_sound = pygame.mixer.Sound("audio/glass-dropped.mp3")
+
+# Game parameters from task_config
+radius = int(task_config["radius"] * dpi_scale)
+block_width = int(task_config["block_width"] * dpi_scale)
+block_height = int(task_config["block_height"] * dpi_scale)
+initial_distance = radius * task_config["initial_distance_factor"] + block_width
+block_move_range = task_config["block_move_range"] * dpi_scale
+slider_granularity = task_config["slider_granularity"]
+gravity = task_config["gravity"] * dpi_scale
+speed_reduction_factor = task_config["speed_reduction_factor"]
+
+# I2C and hardware control from task_config
+VALVE_ADDRESS = int(task_config["VALVE_ADDRESS"])
+PUMP_ADDRESS = int(task_config["PUMP_ADDRESS"])
+I2C_BITRATE = int(task_config["I2C_BITRATE"])
+pump_initial_offset = int(task_config["pump_initial_offset"])
+collision_vibration = int(task_config["collision_vibration"])
+collision_pressure = int(task_config["collision_pressure"])
+collision_duration = float(task_config["collision_duration"])
+object_broken_threshold = int(task_config["object_broken_threshold"])
+success_range_low = int(task_config["success_range_low"])
+success_range_high = int(task_config["success_range_high"])
+success_duration_required = float(task_config["success_duration_required"])
+
+# Game variables
+intersect_state = False
+game_paused = False
+object_dropped = False
+success_timer = 0
+success_achieved = False
+last_pump_value = -1
+last_frequency_value = -1
+object_broken = False
+mapped_value =0 
+
+# Initialize Aardvark Device
+aardvark_handle = aa_open(0)
+
+if aardvark_handle <= 0:
+    print(f"Unable to open Aardvark device. Error code: {aardvark_handle}")
+else:
+    aa_configure(aardvark_handle, AA_CONFIG_SPI_I2C)
+    aa_i2c_bitrate(aardvark_handle, I2C_BITRATE)
+    aa_i2c_pullup(aardvark_handle, AA_I2C_PULLUP_BOTH)
+
+# Slider UI
+# slider_rect = pygame.Rect(
+#     (int(250 * dpi_scale), int(550 * dpi_scale)),
+#     (int(300 * dpi_scale), int(20 * dpi_scale)),
+# )
+# slider = pygame_gui.elements.UIHorizontalSlider(
+#     relative_rect=slider_rect,
+#     start_value=0,
+#     value_range=(-slider_granularity, slider_granularity),
+#     manager=manager,
+# )
+
+# Rendering initial positions
+left_block_x = (width // 2) - radius - block_width - int(initial_distance // 2)
+right_block_x = (width // 2) + radius + int(initial_distance // 2)
+
+left_block_rect = pygame.Rect(
+    left_block_x, (height // 2) - (block_height // 2), block_width, block_height
+)
+right_block_rect = pygame.Rect(
+    right_block_x, (height // 2) - (block_height // 2), block_width, block_height
+)
+
+center_x = width // 2
+center_y = left_block_rect.top - radius 
+
+# -------------------------------------------
+# MAIN CODE
+# -------------------------------------------
+
+# Initialize Threads
+emg_thread = threading.Thread(target=collect_emg_data, daemon=True)
+process_thread = threading.Thread(target=emg_processing_thread, daemon=True)
+i2c_thread = threading.Thread(target=i2c_control_thread, daemon=True)
+
+# Start simulation
 reset_sim()
 clock = pygame.time.Clock()
-
-
-# Game loop
 running = True
-# Game loop
-running = True
+
+# Start Threads
+emg_thread.start()
+process_thread.start()
+i2c_thread.start()
+
 while running:
-    time_delta = clock.tick(60) / 1000.0
+    time_delta = clock.tick(60) / 1000.0  # Limit FPS to 60
 
-    screen.fill((0, 0, 0))
+    screen.fill((0, 0, 0))  # Clear screen
 
-    # Process events early to ensure UI responsiveness
+    # Process events (quit, reset, etc.)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -588,73 +710,51 @@ while running:
 
     manager.update(time_delta)
 
-    # Only update simulation if the game is not paused
+    # Only update physics if the game isn't paused
     if not game_paused:
-        # Read slider input and update block positions
-        slider_value = slider.get_current_value()
-
         # Apply gravity
         ball_velocity_y += gravity
         center_y += ball_velocity_y
 
+        # Prevent ball from sinking below the ground
         if center_y >= height - radius:
             center_y = height - radius
             ball_velocity_y = 0
 
-    # Render object based on the config option
-    if config["render_shape"] == "square":
-        square_size = radius * 2
-        square_x = center_x - radius
-        square_y = center_y - radius
-        draw_glass_effect(screen, square_x, square_y, square_size, square_size)
+    # Draw either a square or a circle, depending on task_config
+    if task_config["render_shape"] == "square":
+        draw_glass_effect(screen, center_x - radius, center_y - radius, radius * 2, radius * 2)
     else:
-        pygame.draw.circle(
-            screen, red, (center_x, center_y), radius
-        )  # Default is a circle
+        pygame.draw.circle(screen, red, (center_x, center_y), radius)
 
-    # Inside the game loop, before drawing the blocks:
+    # Retrieve latest block positions using processed EMG data
     left_display_x, right_display_x = handle_input()
 
-    # Render blocks at adjusted display positions (preventing overlap)
-    pygame.draw.rect(
-        screen, bluegrey, (left_display_x, left_block_rect.y, block_width, block_height)
-    )
-    pygame.draw.rect(
-        screen,
-        bluegrey,
-        (right_display_x, right_block_rect.y, block_width, block_height),
-    )
+    # Render block positions
+    pygame.draw.rect(screen, bluegrey, (left_display_x, left_block_rect.y, block_width, block_height))
+    pygame.draw.rect(screen, bluegrey, (right_display_x, right_block_rect.y, block_width, block_height))
 
-    # Check for collisions and slow down ball if needed
-    check_collision()
-
-    # Check if the object has dropped
+    # Check for object drop or success
     check_if_dropped()
-
-    # Track success if the game is not paused
     if not game_paused:
         check_success(time_delta)
 
-    # If success is achieved, display the message
+    # Display overlays if needed
     if success_achieved:
         display_success_message()
-
-    # If the object is dropped, show the overlay
     if object_dropped:
         display_drop_message()
-
-    # If broken, display the message overlay
     if object_broken:
         display_break_message()
 
+    # Draw UI
     manager.draw_ui(screen)
     pygame.display.flip()
 
+# Cleanup before exiting
 reset_all_devices(baseline_pressure=False)
-
-# Close Aardvark before quitting
 if aardvark_handle > 0:
     aa_close(aardvark_handle)
     print("Aardvark device closed.")
-
 pygame.quit()
+
