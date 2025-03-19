@@ -85,7 +85,7 @@ void setup() {
   // Serial.begin(115200);
   // delay(100); // Allow time for Serial to initialize
 
-  Wire.begin(0x40);            // Initialize I2C in Slave Mode with address 0x55
+  Wire.begin(0x15);            // Initialize I2C in Slave Mode with address 0x55
   Wire.setClock(400000);       // Set I2C bitrate to 400 kHz
   Wire.onReceive(I2C_RxHandler); // Set receive handler
 
