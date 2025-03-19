@@ -3,7 +3,7 @@
 
 volatile int receivedNumber = 0;
 const int pwmPin = 5;   // PWM output pin
-const int enablePin = 12; // Enable pin, always HIGH
+const int enablePin = 4; // Enable pin, always HIGH
 
 // I2C receive handler (ISR context)
 void I2C_RxHandler(int numBytes) {
