@@ -11,13 +11,14 @@ from pyqtgraph.Qt import QtWidgets
 from collections import deque
 from scipy.signal import butter, filtfilt
 from quanser.hardware import HIL
+from scipy.signal import hilbert
 
 # Constants
 BOARD_TYPE = "qpid_e"
 BOARD_IDENTIFIER = "0"
 FREQUENCY = 1000  # Hz
 INPUT_CHANNELS = np.array([1, 2], dtype=np.uint32)  # FLEXION_EMG (Ch 1), EXTENSION_EMG (Ch 2)
-WINDOW_SIZE = 20  # Number of samples for filtering
+WINDOW_SIZE = 100  # Number of samples for filtering
 DURATION = 5  # Duration in seconds
 
 # Shared Data
@@ -63,6 +64,38 @@ def butter_lowpass_filter(data, cutoff=10, fs=1000, order=4):
     b, a = butter(order, normal_cutoff, btype='low', analog=False)
     return filtfilt(b, a, data)
 
+def rms_filter(data):
+    return np.sqrt(np.mean(np.square(data)))
+
+def hilbert_envelope_filter(data, cutoff=10, fs=1000, order=4):
+    """
+    Applies Hilbert Transform to obtain the envelope and then 
+    applies a Butterworth low-pass filter to smooth the envelope.
+    
+    Args:
+        data (array): EMG signal
+        cutoff (int): Low-pass filter cutoff frequency in Hz
+        fs (int): Sampling frequency in Hz
+        order (int): Order of the Butterworth filter
+    
+    Returns:
+        float: Smoothed envelope value
+    """
+    if len(data) < (order * 3):
+        return np.mean(data) if len(data) > 0 else 0
+
+    # Compute the analytic signal using Hilbert Transform
+    analytic_signal = hilbert(data)
+    envelope = np.abs(analytic_signal)  # Envelope of the signal
+
+    # Apply a low-pass filter to smooth the envelope
+    nyquist = 0.5 * fs
+    normal_cutoff = cutoff / nyquist
+    b, a = butter(order, normal_cutoff, btype='low', analog=False)
+    filtered_envelope = filtfilt(b, a, envelope)
+    
+    return filtered_envelope[-1]
+
 def emg_processing_thread():
     global processed_emg
     start_time = time.time()
@@ -76,11 +109,15 @@ def emg_processing_thread():
 
         if all(len(emg_window_buffer[i]) >= max(WINDOW_SIZE, 3 * 4) for i in range(len(INPUT_CHANNELS))):
             filtered_values = np.array([
-                butter_lowpass_filter(list(emg_window_buffer[i]))[-1]
+                # butter_lowpass_filter(list(emg_window_buffer[i]))[-1]
+                rms_filter(list(emg_window_buffer[i]))
+                # hilbert_envelope_filter(list(emg_window_buffer[i])) 
                 for i in range(len(INPUT_CHANNELS))
             ])
             with lock_processed:
-                processed_emg[:] = filtered_values
+                # processed_emg[:] = filtered_values
+                processed_emg[:] = np.abs(filtered_values)
+
             
             # Store timestamp
             current_time = time.time() - start_time
@@ -113,7 +150,7 @@ class RealTimeEMGPlot(QtWidgets.QMainWindow):
         self.graph_widget.addLegend()
         self.graph_widget.setXRange(0, DURATION)
 
-        # self.raw_curve = self.graph_widget.plot(pen='r', name="Raw EMG")
+        self.raw_curve = self.graph_widget.plot(pen='r', name="Raw EMG")
         self.filtered_curve = self.graph_widget.plot(pen='y', name="Filtered EMG")
 
         self.timer = pg.QtCore.QTimer()
@@ -123,7 +160,7 @@ class RealTimeEMGPlot(QtWidgets.QMainWindow):
     def update_plot(self):
         if time_stamps:
             self.graph_widget.setXRange(time_stamps[0], time_stamps[-1])
-            # self.raw_curve.setData(list(time_stamps), list(raw_data))
+            self.raw_curve.setData(list(time_stamps), list(raw_data))
             self.filtered_curve.setData(list(time_stamps), list(filtered_data))
             # print(f"Time Data (X-axis): {list(time_stamps)}")
 
