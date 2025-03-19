@@ -15,7 +15,7 @@ else:
 
 # Function to load variables from CSV
 def load_config(filename="config.csv"):
-    config = {}
+    config = {}]
     with open(filename, mode="r") as file:
         reader = csv.reader(file)
         next(reader)
