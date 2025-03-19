@@ -1,7 +1,13 @@
 import tkinter as tk
 from tkinter import ttk
-from aardvark_api.python.aardvark_py import *
 from array import array
+import platform
+if platform.system() == "Darwin":  # macOS
+    from aardvark_api_mac.python.aardvark_py import *
+elif platform.system() == "Windows":
+    from aardvark_api_windows.python.aardvark_py import *
+else:
+    raise RuntimeError("Need to download OS-specific Aardvark API.")
 
 # Constants
 I2C_BITRATE = 400  # I2C bitrate in kHz
