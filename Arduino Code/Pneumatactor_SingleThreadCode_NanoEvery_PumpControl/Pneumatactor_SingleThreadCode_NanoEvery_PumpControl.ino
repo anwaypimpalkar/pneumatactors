@@ -2,8 +2,8 @@
 #include <Wire.h>
 
 volatile int receivedNumber = 0;
-const int pwmPin = 6;   // PWM output pin
-const int enablePin = 12; // Enable pin, always HIGH
+const int pwmPin = 5;   // PWM output pin
+const int enablePin = 4; // Enable pin, always HIGH
 
 // I2C receive handler (ISR context)
 void I2C_RxHandler(int numBytes) {
@@ -17,7 +17,7 @@ void setup() {
   pinMode(enablePin, OUTPUT); // Set Enable pin as output
   digitalWrite(enablePin, HIGH); // Always set D12 to HIGH (5V)
 
-  Wire.begin(0x10);         // Initialize I2C in Slave Mode with address 0x55
+  Wire.begin(0x30);         // Initialize I2C in Slave Mode with address 0x55
   Wire.setClock(400000);    // Set I2C bitrate to 400 kHz
   Wire.onReceive(I2C_RxHandler); // Set receive handler
 }
