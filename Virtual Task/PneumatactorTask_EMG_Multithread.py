@@ -34,7 +34,7 @@ INPUT_CHANNELS = np.array([1, 2], dtype=np.uint32)  # FLEXION_EMG (Ch 1), EXTENS
 WINDOW_SIZE = 300  
 
 # Participant Parameters
-PARTICIPANT = "p01"
+PARTICIPANT = "p02"
 participant_emg_calibration_file = f"{PARTICIPANT}/{PARTICIPANT}_calibration.csv"
 
 # Threading Tools
@@ -243,6 +243,8 @@ def check_collision():
     # Calculate distances between the sphere edge and block inner edges
     distance_left, distance_right = calculate_distances()
 
+    # print(distance_left)
+
     # Adjust ball behavior if blocks penetrate the sphere
     adjust_ball_velocity(distance_left, distance_right)
 
@@ -367,7 +369,7 @@ def handle_collision_feedback(distance_left, distance_right):
     is_colliding = distance_left <= 0 or distance_right <= 0
     if is_colliding and not intersect_state:
         intersect_state = True
-        print("Collision!")
+        # print("Collision!")
 
         send_number_to_address(
             VALVE_ADDRESS, int(mapping_config["at_collision_vibration_value"])
@@ -543,8 +545,9 @@ def reset_sim():
     game_paused = False  # Resume updates
     success_timer = 0  # Reset success timer
     mapped_value = 0
-    left_block_rect.x = left_block_x
-    right_block_rect.x = right_block_x
+    left_block_rect.x = (width // 2) - radius - block_width - initial_distance // 2
+    right_block_rect.x = (width // 2) + radius + initial_distance // 2
+
 
     # Send the baseline pressure value at the start
     baseline_pressure = int(mapping_config["baseline_pressure_value"])
@@ -604,16 +607,16 @@ font = pygame.font.SysFont(None, int(task_config["font_scale"] * dpi_scale))
 pygame.mixer.init()
 shatter_sound = pygame.mixer.Sound("audio/glass-shatter.mp3")
 drop_sound = pygame.mixer.Sound("audio/glass-dropped.mp3")
-
 # Game parameters from task_config
 radius = int(task_config["radius"] * dpi_scale)
 block_width = int(task_config["block_width"] * dpi_scale)
 block_height = int(task_config["block_height"] * dpi_scale)
-initial_distance = radius * task_config["initial_distance_factor"] + block_width
+initial_distance = radius * task_config["initial_distance_factor"]
 block_move_range = task_config["block_move_range"] * dpi_scale
 slider_granularity = task_config["slider_granularity"]
 gravity = task_config["gravity"] * dpi_scale
 speed_reduction_factor = task_config["speed_reduction_factor"]
+print(initial_distance)
 
 # I2C and hardware control from task_config
 VALVE_ADDRESS = int(task_config["VALVE_ADDRESS"])
@@ -662,8 +665,8 @@ else:
 # )
 
 # Rendering initial positions
-left_block_x = (width // 2) - radius - block_width - int(initial_distance // 2)
-right_block_x = (width // 2) + radius + int(initial_distance // 2)
+left_block_x = (width // 2) - radius - block_width - initial_distance // 2
+right_block_x = (width // 2) + radius + initial_distance // 2
 
 left_block_rect = pygame.Rect(
     left_block_x, (height // 2) - (block_height // 2), block_width, block_height

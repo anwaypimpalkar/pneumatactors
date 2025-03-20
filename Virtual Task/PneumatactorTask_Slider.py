@@ -14,8 +14,8 @@ else:
     raise RuntimeError("Need to download OS-specific Aardvark API.")
 
 # Function to load variables from CSV
-def load_config(filename="config.csv"):
-    config = {}]
+def load_config(filename="config/task_config.csv"):    
+    config = {}
     with open(filename, mode="r") as file:
         reader = csv.reader(file)
         next(reader)
@@ -30,7 +30,7 @@ def load_config(filename="config.csv"):
 config = load_config()  # Load main config
 
 # Function to load mapping config from CSV
-def load_mapping_config(filename=config["map_file"]):
+def load_mapping_config(filename=f"maps/{config["map_file"]}"):
     mapping_config = {}
     with open(filename, mode="r") as file:
         reader = csv.reader(file)
