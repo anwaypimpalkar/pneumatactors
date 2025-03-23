@@ -21,8 +21,8 @@ BOARD_TYPE = "qpid_e"
 BOARD_IDENTIFIER = "0"
 FREQUENCY = 1000  # Hz
 INPUT_CHANNELS = np.array([1, 2], dtype=np.uint32)  # FLEXION_EMG (Ch 1), EXTENSION_EMG (Ch 2)
-WINDOW_SIZE = 100  # Number of samples for filtering
-DURATION = 10  # Duration in seconds
+WINDOW_SIZE = 300  # Number of samples for filtering
+DURATION = 5  # Duration in seconds
 PARTICIPANT = "p02"
 
 if not os.path.exists(f"{PARTICIPANT}"):

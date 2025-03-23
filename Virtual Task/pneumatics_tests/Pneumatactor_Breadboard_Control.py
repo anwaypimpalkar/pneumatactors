@@ -11,8 +11,8 @@ else:
 
 # Constants
 I2C_BITRATE = 400  # I2C bitrate in kHz
-VALVE_ADDRESSES = [0x40, 0x60, 0x55]  # Addresses of the three valves
-PUMP_ADDRESS = 0x10  # Address of the pump
+VALVE_ADDRESSES = [0x10, 0x15]  # Addresses of the three valves
+PUMP_ADDRESS = 0x30  # Address of the pump
 
 
 def send_number_to_address(address, number):
