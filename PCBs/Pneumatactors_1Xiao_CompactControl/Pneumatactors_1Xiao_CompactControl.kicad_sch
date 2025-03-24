@@ -732,7 +732,7 @@
     )
   )
 
-  (junction (at 111.76 88.9) (diameter 0) (color 0 0 0 0)
+  (junction (at 88.9 88.265) (diameter 0) (color 0 0 0 0)
     (uuid 58c7b00c-6458-47aa-b9d1-c95bbe03ec09)
   )
   (junction (at 48.895 95.25) (diameter 0) (color 0 0 0 0)
@@ -741,18 +741,18 @@
   (junction (at 48.895 87.63) (diameter 0) (color 0 0 0 0)
     (uuid af976755-8cb0-46b3-920f-d8e88e22f015)
   )
-  (junction (at 111.76 96.52) (diameter 0) (color 0 0 0 0)
+  (junction (at 88.9 95.885) (diameter 0) (color 0 0 0 0)
     (uuid ba15fdad-0dfb-4d47-8d4b-3b36c68df3eb)
   )
 
   (no_connect (at 91.44 55.88) (uuid 199e8f43-9da1-40df-95d6-b67502266015))
   (no_connect (at 210.185 59.055) (uuid 377b7fa7-1a92-4ae5-a852-58de64464eb4))
   (no_connect (at 49.53 55.88) (uuid 3a3391ff-4be5-4369-9946-a0570f6f3fce))
-  (no_connect (at 168.91 37.465) (uuid 6114b931-9d8a-492d-9dfc-01bb5411a035))
+  (no_connect (at 143.51 102.87) (uuid 6114b931-9d8a-492d-9dfc-01bb5411a035))
   (no_connect (at 77.47 21.59) (uuid 79b41876-07b2-47fb-a611-2f1cb48debf9))
   (no_connect (at 73.66 66.04) (uuid 89c45a4e-dc06-41c6-ba5b-7ee02662ff60))
   (no_connect (at 69.85 21.59) (uuid dcd4c5df-0ebe-4a22-a927-58079eef3f09))
-  (no_connect (at 146.05 37.465) (uuid e65e41b4-6a05-41ce-a4f0-effedde36bb6))
+  (no_connect (at 120.65 102.87) (uuid e65e41b4-6a05-41ce-a4f0-effedde36bb6))
   (no_connect (at 73.66 21.59) (uuid e69ea798-0add-4e15-9f82-f6a424158e6b))
   (no_connect (at 66.04 21.59) (uuid ec0d786a-573f-48d8-be12-63a5e36b6b40))
   (no_connect (at 68.58 66.04) (uuid f74476a1-3969-433c-86dd-fa8377498552))
@@ -789,7 +789,7 @@
     (stroke (width 0) (type default))
     (uuid 4ca5d8ec-b653-4709-9195-db6bace54e8b)
   )
-  (wire (pts (xy 111.76 88.9) (xy 111.76 91.44))
+  (wire (pts (xy 88.9 88.265) (xy 88.9 90.805))
     (stroke (width 0) (type default))
     (uuid 4cef0602-5d0e-4afa-8ff7-5f03553fe41d)
   )
@@ -801,11 +801,11 @@
     (stroke (width 0) (type default))
     (uuid 829dfff3-2b95-4456-b542-6c07d8054a28)
   )
-  (wire (pts (xy 111.76 96.52) (xy 111.76 100.33))
+  (wire (pts (xy 88.9 95.885) (xy 88.9 99.695))
     (stroke (width 0) (type default))
     (uuid 842445b7-889c-4aac-aa7c-fadd79658039)
   )
-  (wire (pts (xy 99.695 88.9) (xy 111.76 88.9))
+  (wire (pts (xy 76.835 88.265) (xy 88.9 88.265))
     (stroke (width 0) (type default))
     (uuid 8e37fae6-91ab-4f95-891f-51f8bbb6b7ae)
   )
@@ -813,7 +813,7 @@
     (stroke (width 0) (type default))
     (uuid 9eb344fd-ae80-4e3e-ae97-1633701552f5)
   )
-  (wire (pts (xy 111.76 114.935) (xy 111.76 110.49))
+  (wire (pts (xy 88.9 114.3) (xy 88.9 109.855))
     (stroke (width 0) (type default))
     (uuid 9f9ee0ef-c60e-4c1a-a02c-d5817c0c05c9)
   )
@@ -821,15 +821,15 @@
     (stroke (width 0) (type default))
     (uuid a94f25c3-ce34-4c9e-a4f6-83a03d2aa18d)
   )
-  (wire (pts (xy 111.76 83.185) (xy 111.76 88.9))
+  (wire (pts (xy 88.9 82.55) (xy 88.9 88.265))
     (stroke (width 0) (type default))
     (uuid c3d139c1-51d9-4f06-9a32-4b2256419e9b)
   )
-  (wire (pts (xy 99.695 96.52) (xy 111.76 96.52))
+  (wire (pts (xy 76.835 95.885) (xy 88.9 95.885))
     (stroke (width 0) (type default))
     (uuid cdebbe54-c7ac-462a-a0f9-23bd0ce2f122)
   )
-  (wire (pts (xy 111.76 93.98) (xy 111.76 96.52))
+  (wire (pts (xy 88.9 93.345) (xy 88.9 95.885))
     (stroke (width 0) (type default))
     (uuid dfae2a2d-1b3d-450f-93c3-2c099f194685)
   )
@@ -846,10 +846,10 @@
     (uuid ed036bb9-cdb4-475c-a07a-653ddd03f73f)
   )
 
-  (global_label "VALVE_2_PFM" (shape input) (at 104.14 105.41 180) (fields_autoplaced)
+  (global_label "VALVE_2_PFM" (shape input) (at 81.28 104.775 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid 01ae8f95-e462-4f5b-a9ad-3885a177f591)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 88.7572 105.41 0)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 65.8972 104.775 0)
       (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
@@ -888,10 +888,10 @@
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
   )
-  (global_label "PUMP_-" (shape input) (at 168.91 32.385 0) (fields_autoplaced)
+  (global_label "PUMP_-" (shape input) (at 143.51 97.79 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left))
     (uuid 282829be-0625-4896-ab17-a7a66185b446)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 179.7571 32.385 0)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 154.3571 97.79 0)
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
   )
@@ -902,10 +902,10 @@
       (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
-  (global_label "PUMP_+" (shape input) (at 168.91 34.925 0) (fields_autoplaced)
+  (global_label "PUMP_+" (shape input) (at 143.51 100.33 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left))
     (uuid 31b44706-a288-4281-9ba5-5d1a9900812f)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 179.7571 34.925 0)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 154.3571 100.33 0)
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
   )
@@ -916,10 +916,10 @@
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
   )
-  (global_label "VIN" (shape input) (at 111.76 83.185 90) (fields_autoplaced)
+  (global_label "VIN" (shape input) (at 88.9 82.55 90) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left))
     (uuid 3af8476e-b378-4068-b60e-8884e0576747)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 111.76 77.1759 90)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 88.9 76.5409 90)
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
   )
@@ -965,24 +965,24 @@
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
   )
-  (global_label "3V3" (shape input) (at 146.05 29.845 180) (fields_autoplaced)
+  (global_label "3V3" (shape input) (at 120.65 95.25 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid 5e1caa46-0763-43d2-b56f-48fe3b0aa0d5)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 139.5572 29.845 0)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 114.1572 95.25 0)
       (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
-  (global_label "GND" (shape input) (at 146.05 34.925 180) (fields_autoplaced)
+  (global_label "GND" (shape input) (at 120.65 100.33 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid 5eeba641-2957-4bf8-8286-088dae87aec1)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 139.1943 34.925 0)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 113.7943 100.33 0)
       (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
-  (global_label "PUMP_PWM" (shape input) (at 146.05 32.385 180) (fields_autoplaced)
+  (global_label "PUMP_PWM" (shape input) (at 120.65 97.79 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid 643a2790-a92c-4938-91e8-a2ee06e9ba2d)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 132.6025 32.385 0)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 107.2025 97.79 0)
       (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
@@ -1000,10 +1000,10 @@
       (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
-  (global_label "VIN" (shape input) (at 168.91 29.845 0) (fields_autoplaced)
+  (global_label "VIN" (shape input) (at 143.51 95.25 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left))
     (uuid 699ec344-ce39-4b89-ac89-254831c01b8a)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 174.9191 29.845 0)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 149.5191 95.25 0)
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
   )
@@ -1014,17 +1014,17 @@
       (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
-  (global_label "GND" (shape input) (at 168.91 27.305 0) (fields_autoplaced)
+  (global_label "GND" (shape input) (at 143.51 92.71 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left))
     (uuid 75876b64-1760-4520-8c46-63ab6980d73b)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 175.7657 27.305 0)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 150.3657 92.71 0)
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
   )
-  (global_label "GND" (shape input) (at 146.05 27.305 180) (fields_autoplaced)
+  (global_label "GND" (shape input) (at 120.65 92.71 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid 77232e58-f348-47a9-86fb-57eadab16651)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 139.1943 27.305 0)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 113.7943 92.71 0)
       (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
@@ -1098,10 +1098,10 @@
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
   )
-  (global_label "GND" (shape input) (at 111.76 114.935 270) (fields_autoplaced)
+  (global_label "GND" (shape input) (at 88.9 114.3 270) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid da5e9eb2-fe35-40c1-a2ae-049ba7332bf2)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 111.76 121.7907 90)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 88.9 121.1557 90)
       (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
@@ -1141,19 +1141,19 @@
     )
   )
 
-  (symbol (lib_id "Driver_Motor:Pololu_2990_DRV8838") (at 157.48 33.655 0) (unit 1)
+  (symbol (lib_id "Driver_Motor:Pololu_2990_DRV8838") (at 132.08 99.06 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 00a48046-1ce1-4a13-9e07-2c097b3b8722)
-    (property "Reference" "U2" (at 157.48 22.225 0)
+    (property "Reference" "U2" (at 132.08 87.63 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "Pololu 2990" (at 157.48 24.13 0)
+    (property "Value" "Pololu 2990" (at 132.08 89.535 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Footprint" "Pneumatactors:Pololu 2990 Motor Driver" (at 148.59 24.765 0)
+    (property "Footprint" "Pneumatactors:Pololu 2990 Motor Driver" (at 123.19 90.17 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Datasheet" "" (at 148.59 24.765 0)
+    (property "Datasheet" "" (at 123.19 90.17 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "9" (uuid 25c7ddc5-37e0-4080-b796-b1c579343a59))
@@ -1167,7 +1167,7 @@
     (pin "1" (uuid b23023fc-2bfc-430b-8210-36ecf467a838))
     (pin "10" (uuid a1efac5c-510e-47a6-837f-ac6d26d1a7dd))
     (instances
-      (project "Compact_Control"
+      (project "Pneumatactors_1Xiao_CompactControl"
         (path "/15e4f0c6-1f71-4e2a-9ead-41af26c09ce5"
           (reference "U2") (unit 1)
         )
@@ -1193,7 +1193,7 @@
     (pin "1" (uuid 8168effe-5aff-4a53-98c2-7f197164eeca))
     (pin "2" (uuid 92785904-e015-418b-9eac-b0703a3d17ff))
     (instances
-      (project "Compact_Control"
+      (project "Pneumatactors_1Xiao_CompactControl"
         (path "/15e4f0c6-1f71-4e2a-9ead-41af26c09ce5"
           (reference "D5") (unit 1)
         )
@@ -1221,7 +1221,7 @@
     (pin "3" (uuid 61acc70a-b7fb-4f24-b223-71d33bbfa4a3))
     (pin "4" (uuid ea1aa905-aaaf-4465-ba0b-17003730feff))
     (instances
-      (project "Compact_Control"
+      (project "Pneumatactors_1Xiao_CompactControl"
         (path "/15e4f0c6-1f71-4e2a-9ead-41af26c09ce5"
           (reference "J4") (unit 1)
         )
@@ -1247,7 +1247,7 @@
     (pin "1" (uuid 564dd877-f865-4bcb-91b1-303e6b84b3b5))
     (pin "2" (uuid 1e4aa230-040c-4823-b6f7-c65e57a82ba4))
     (instances
-      (project "Compact_Control"
+      (project "Pneumatactors_1Xiao_CompactControl"
         (path "/15e4f0c6-1f71-4e2a-9ead-41af26c09ce5"
           (reference "J3") (unit 1)
         )
@@ -1274,7 +1274,7 @@
     (pin "3" (uuid 490c8517-5cb1-4103-b633-22458ccc7887))
     (pin "1" (uuid ef798a5e-fd3b-4606-9229-e4c69f21a6bb))
     (instances
-      (project "Compact_Control"
+      (project "Pneumatactors_1Xiao_CompactControl"
         (path "/15e4f0c6-1f71-4e2a-9ead-41af26c09ce5"
           (reference "Q1") (unit 1)
         )
@@ -1318,7 +1318,7 @@
     (pin "1" (uuid ac5f25bb-3dac-428b-8d97-e0d2848fe46c))
     (pin "17" (uuid 2515c303-e2e4-4781-874d-0b4d076bee6e))
     (instances
-      (project "Compact_Control"
+      (project "Pneumatactors_1Xiao_CompactControl"
         (path "/15e4f0c6-1f71-4e2a-9ead-41af26c09ce5"
           (reference "U1") (unit 1)
         )
@@ -1344,7 +1344,7 @@
     (pin "1" (uuid cfb1771d-7b7b-4a67-9027-2149af2846e6))
     (pin "2" (uuid 608682ce-b021-4545-836f-bb11071b6b38))
     (instances
-      (project "Compact_Control"
+      (project "Pneumatactors_1Xiao_CompactControl"
         (path "/15e4f0c6-1f71-4e2a-9ead-41af26c09ce5"
           (reference "D6") (unit 1)
         )
@@ -1370,7 +1370,7 @@
     (pin "2" (uuid 17c7f0f2-6c5b-4c63-9579-c4fa37820e22))
     (pin "1" (uuid 4d0afa0e-ae1e-4515-847e-882a0169c501))
     (instances
-      (project "Compact_Control"
+      (project "Pneumatactors_1Xiao_CompactControl"
         (path "/15e4f0c6-1f71-4e2a-9ead-41af26c09ce5"
           (reference "R4") (unit 1)
         )
@@ -1402,7 +1402,7 @@
     (pin "1" (uuid 4f88c031-baf1-4a0b-bac2-dcfdfac68cdf))
     (pin "2" (uuid 73adaba1-62e8-448b-ac78-bbc8c6580961))
     (instances
-      (project "Compact_Control"
+      (project "Pneumatactors_1Xiao_CompactControl"
         (path "/15e4f0c6-1f71-4e2a-9ead-41af26c09ce5"
           (reference "D1") (unit 1)
         )
@@ -1410,26 +1410,26 @@
     )
   )
 
-  (symbol (lib_id "Transistor_FET:IRLML2060") (at 109.22 105.41 0) (unit 1)
+  (symbol (lib_id "Transistor_FET:IRLML2060") (at 86.36 104.775 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 88b3d495-8a37-4c58-ac73-060ecbb77792)
-    (property "Reference" "Q2" (at 115.57 104.14 0)
+    (property "Reference" "Q2" (at 92.71 103.505 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "IRLML2060" (at 115.57 106.68 0)
+    (property "Value" "IRLML2060" (at 92.71 106.045 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 114.3 107.315 0)
+    (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 91.44 106.68 0)
       (effects (font (size 1.27 1.27) italic) (justify left) hide)
     )
-    (property "Datasheet" "https://www.infineon.com/dgdl/irlml2060pbf.pdf?fileId=5546d462533600a401535664b7fb25ee" (at 109.22 105.41 0)
+    (property "Datasheet" "https://www.infineon.com/dgdl/irlml2060pbf.pdf?fileId=5546d462533600a401535664b7fb25ee" (at 86.36 104.775 0)
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
     (pin "2" (uuid b632e815-540c-44fa-b701-7412f735cdfd))
     (pin "3" (uuid 94193987-b6e4-4625-9eee-2a9cb9377873))
     (pin "1" (uuid f41f9191-60f5-4938-acf8-85bbac70d907))
     (instances
-      (project "Compact_Control"
+      (project "Pneumatactors_1Xiao_CompactControl"
         (path "/15e4f0c6-1f71-4e2a-9ead-41af26c09ce5"
           (reference "Q2") (unit 1)
         )
@@ -1455,7 +1455,7 @@
     (pin "1" (uuid 1a474995-d61a-484d-ac7a-1e4ef809ee70))
     (pin "2" (uuid abc4db53-bbcc-4fee-bc40-e874a880ae1b))
     (instances
-      (project "Compact_Control"
+      (project "Pneumatactors_1Xiao_CompactControl"
         (path "/15e4f0c6-1f71-4e2a-9ead-41af26c09ce5"
           (reference "D4") (unit 1)
         )
@@ -1481,7 +1481,7 @@
     (pin "2" (uuid cae2abe3-e2e4-4af6-9b67-c7fadcf1020e))
     (pin "1" (uuid 774e1fab-a6fe-42d8-8b63-eccdb0309967))
     (instances
-      (project "Compact_Control"
+      (project "Pneumatactors_1Xiao_CompactControl"
         (path "/15e4f0c6-1f71-4e2a-9ead-41af26c09ce5"
           (reference "R3") (unit 1)
         )
@@ -1507,7 +1507,7 @@
     (pin "1" (uuid b2d71ba3-8dc9-4909-8948-428c610cbb18))
     (pin "2" (uuid 29b3743f-e2fc-49af-8070-08950829a2e4))
     (instances
-      (project "Compact_Control"
+      (project "Pneumatactors_1Xiao_CompactControl"
         (path "/15e4f0c6-1f71-4e2a-9ead-41af26c09ce5"
           (reference "D7") (unit 1)
         )
@@ -1534,7 +1534,7 @@
     (pin "3" (uuid 7fff4470-5051-4368-9b4c-cdbe9a84f462))
     (pin "2" (uuid d2df7065-fdba-4257-8406-f19878cbf2b5))
     (instances
-      (project "Compact_Control"
+      (project "Pneumatactors_1Xiao_CompactControl"
         (path "/15e4f0c6-1f71-4e2a-9ead-41af26c09ce5"
           (reference "U3") (unit 1)
         )
@@ -1560,7 +1560,7 @@
     (pin "2" (uuid 92434d13-bf36-4369-8de6-40fdb8215c6a))
     (pin "1" (uuid 3a763a27-cdeb-4e01-bba5-1e2944bf6627))
     (instances
-      (project "Compact_Control"
+      (project "Pneumatactors_1Xiao_CompactControl"
         (path "/15e4f0c6-1f71-4e2a-9ead-41af26c09ce5"
           (reference "R2") (unit 1)
         )
@@ -1568,31 +1568,31 @@
     )
   )
 
-  (symbol (lib_id "Diode:1N4001") (at 99.695 92.71 270) (unit 1)
+  (symbol (lib_id "Diode:1N4001") (at 76.835 92.075 270) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid d6711c37-b90c-4d95-acec-85381acf9c14)
-    (property "Reference" "D3" (at 102.87 91.44 90)
+    (property "Reference" "D3" (at 80.01 90.805 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "1N4001" (at 102.87 93.98 90)
+    (property "Value" "1N4001" (at 80.01 93.345 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "Diode_SMD:D_SOD-123F" (at 99.695 92.71 0)
+    (property "Footprint" "Diode_SMD:D_SOD-123F" (at 76.835 92.075 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Datasheet" "http://www.vishay.com/docs/88503/1n4001.pdf" (at 99.695 92.71 0)
+    (property "Datasheet" "http://www.vishay.com/docs/88503/1n4001.pdf" (at 76.835 92.075 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Sim.Device" "D" (at 99.695 92.71 0)
+    (property "Sim.Device" "D" (at 76.835 92.075 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Sim.Pins" "1=K 2=A" (at 99.695 92.71 0)
+    (property "Sim.Pins" "1=K 2=A" (at 76.835 92.075 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid e03ea224-7275-4ed6-85aa-df49462a3f78))
     (pin "2" (uuid 2235575e-52b4-49cc-8682-ec68250f1e02))
     (instances
-      (project "Compact_Control"
+      (project "Pneumatactors_1Xiao_CompactControl"
         (path "/15e4f0c6-1f71-4e2a-9ead-41af26c09ce5"
           (reference "D3") (unit 1)
         )
@@ -1624,7 +1624,7 @@
     (pin "1" (uuid 2fc36034-01a5-4f05-b0fe-bb83227b1596))
     (pin "2" (uuid c9b05e7d-3273-42c7-bd01-b3537d78ec97))
     (instances
-      (project "Compact_Control"
+      (project "Pneumatactors_1Xiao_CompactControl"
         (path "/15e4f0c6-1f71-4e2a-9ead-41af26c09ce5"
           (reference "D2") (unit 1)
         )
@@ -1650,7 +1650,7 @@
     (pin "2" (uuid 3020d273-5a18-49af-a634-bb20ba9dbdad))
     (pin "1" (uuid 56e7b3c0-e7bc-4783-b5be-8fc9b12b49ac))
     (instances
-      (project "Compact_Control"
+      (project "Pneumatactors_1Xiao_CompactControl"
         (path "/15e4f0c6-1f71-4e2a-9ead-41af26c09ce5"
           (reference "R1") (unit 1)
         )
@@ -1676,7 +1676,7 @@
     (pin "1" (uuid c14382ad-dee0-486c-aa7e-f15eb7a005cd))
     (pin "2" (uuid 610dabce-49c5-444e-b235-ff45045f90bb))
     (instances
-      (project "Compact_Control"
+      (project "Pneumatactors_1Xiao_CompactControl"
         (path "/15e4f0c6-1f71-4e2a-9ead-41af26c09ce5"
           (reference "J1") (unit 1)
         )
@@ -1684,25 +1684,25 @@
     )
   )
 
-  (symbol (lib_id "Connector:Conn_01x02_Pin") (at 116.84 93.98 180) (unit 1)
+  (symbol (lib_id "Connector:Conn_01x02_Pin") (at 93.98 93.345 180) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid f8104ddf-2ace-4ccc-af7f-72eca3231d58)
-    (property "Reference" "J2" (at 118.11 91.44 0)
+    (property "Reference" "J2" (at 95.25 90.805 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Value" "Valve_2" (at 118.11 93.98 0)
+    (property "Value" "Valve_2" (at 95.25 93.345 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" (at 116.84 93.98 0)
+    (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" (at 93.98 93.345 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Datasheet" "~" (at 116.84 93.98 0)
+    (property "Datasheet" "~" (at 93.98 93.345 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 9a666ae5-186d-42fe-8909-0ebbeb5e2b6b))
     (pin "2" (uuid 8c1b2ded-6f76-42de-b964-aafed1c66901))
     (instances
-      (project "Compact_Control"
+      (project "Pneumatactors_1Xiao_CompactControl"
         (path "/15e4f0c6-1f71-4e2a-9ead-41af26c09ce5"
           (reference "J2") (unit 1)
         )
