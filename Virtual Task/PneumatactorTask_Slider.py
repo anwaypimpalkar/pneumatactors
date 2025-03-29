@@ -14,7 +14,7 @@ else:
     raise RuntimeError("Need to download OS-specific Aardvark API.")
 
 # Function to load variables from CSV
-def load_config(filename="config/task_config.csv"):    
+def load_config(filename="config/task_config.csv"):             
     config = {}
     with open(filename, mode="r") as file:
         reader = csv.reader(file)
