@@ -86,8 +86,8 @@ void ActuationTask(void *pvParameters) {
   // Wire.begin();
 
   // Setup both pumps (assuming different I2C addresses)
-  const int PUMP1_ADDR = 0x25;  
-  const int PUMP2_ADDR = 0x26;
+  const int PUMP1_ADDR = 0x26;  
+  const int PUMP2_ADDR = 0x25;
 
 
   spm_i2c_setup_manual_power_control(PUMP1_ADDR);
@@ -162,7 +162,7 @@ void setup() {
   Wire.begin();
   delay(500);
   
-  byte pumpAddresses[] = {0x25, 0x26};
+  byte pumpAddresses[] = {0x26, 0x25};
   for (byte i = 0; i < sizeof(pumpAddresses); i++) {
     Wire.beginTransmission(pumpAddresses[i]);
     byte error = Wire.endTransmission();
