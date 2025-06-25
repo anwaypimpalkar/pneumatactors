@@ -1,0 +1,561 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		001EDC1E2DF10291001EBFE6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 001EDC082DF1028F001EBFE6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 001EDC0F2DF1028F001EBFE6;
+			remoteInfo = Pneumatactors_App;
+		};
+		001EDC282DF10291001EBFE6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 001EDC082DF1028F001EBFE6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 001EDC0F2DF1028F001EBFE6;
+			remoteInfo = Pneumatactors_App;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		001EDC102DF1028F001EBFE6 /* Pneumatactors.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pneumatactors.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		001EDC1D2DF10291001EBFE6 /* Pneumatactors_AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Pneumatactors_AppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		001EDC272DF10291001EBFE6 /* Pneumatactors_AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Pneumatactors_AppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		001EDC122DF1028F001EBFE6 /* Pneumatactors_App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Pneumatactors_App;
+			sourceTree = "<group>";
+		};
+		001EDC202DF10291001EBFE6 /* Pneumatactors_AppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Pneumatactors_AppTests;
+			sourceTree = "<group>";
+		};
+		001EDC2A2DF10291001EBFE6 /* Pneumatactors_AppUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Pneumatactors_AppUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		001EDC0D2DF1028F001EBFE6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		001EDC1A2DF10291001EBFE6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		001EDC242DF10291001EBFE6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		001EDC072DF1028F001EBFE6 = {
+			isa = PBXGroup;
+			children = (
+				001EDC122DF1028F001EBFE6 /* Pneumatactors_App */,
+				001EDC202DF10291001EBFE6 /* Pneumatactors_AppTests */,
+				001EDC2A2DF10291001EBFE6 /* Pneumatactors_AppUITests */,
+				001EDC112DF1028F001EBFE6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		001EDC112DF1028F001EBFE6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				001EDC102DF1028F001EBFE6 /* Pneumatactors.app */,
+				001EDC1D2DF10291001EBFE6 /* Pneumatactors_AppTests.xctest */,
+				001EDC272DF10291001EBFE6 /* Pneumatactors_AppUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		001EDC0F2DF1028F001EBFE6 /* Pneumatactors_App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 001EDC312DF10291001EBFE6 /* Build configuration list for PBXNativeTarget "Pneumatactors_App" */;
+			buildPhases = (
+				001EDC0C2DF1028F001EBFE6 /* Sources */,
+				001EDC0D2DF1028F001EBFE6 /* Frameworks */,
+				001EDC0E2DF1028F001EBFE6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				001EDC122DF1028F001EBFE6 /* Pneumatactors_App */,
+			);
+			name = Pneumatactors_App;
+			packageProductDependencies = (
+			);
+			productName = Pneumatactors_App;
+			productReference = 001EDC102DF1028F001EBFE6 /* Pneumatactors.app */;
+			productType = "com.apple.product-type.application";
+		};
+		001EDC1C2DF10291001EBFE6 /* Pneumatactors_AppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 001EDC342DF10291001EBFE6 /* Build configuration list for PBXNativeTarget "Pneumatactors_AppTests" */;
+			buildPhases = (
+				001EDC192DF10291001EBFE6 /* Sources */,
+				001EDC1A2DF10291001EBFE6 /* Frameworks */,
+				001EDC1B2DF10291001EBFE6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				001EDC1F2DF10291001EBFE6 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				001EDC202DF10291001EBFE6 /* Pneumatactors_AppTests */,
+			);
+			name = Pneumatactors_AppTests;
+			packageProductDependencies = (
+			);
+			productName = Pneumatactors_AppTests;
+			productReference = 001EDC1D2DF10291001EBFE6 /* Pneumatactors_AppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		001EDC262DF10291001EBFE6 /* Pneumatactors_AppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 001EDC372DF10291001EBFE6 /* Build configuration list for PBXNativeTarget "Pneumatactors_AppUITests" */;
+			buildPhases = (
+				001EDC232DF10291001EBFE6 /* Sources */,
+				001EDC242DF10291001EBFE6 /* Frameworks */,
+				001EDC252DF10291001EBFE6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				001EDC292DF10291001EBFE6 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				001EDC2A2DF10291001EBFE6 /* Pneumatactors_AppUITests */,
+			);
+			name = Pneumatactors_AppUITests;
+			packageProductDependencies = (
+			);
+			productName = Pneumatactors_AppUITests;
+			productReference = 001EDC272DF10291001EBFE6 /* Pneumatactors_AppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		001EDC082DF1028F001EBFE6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1630;
+				LastUpgradeCheck = 1630;
+				TargetAttributes = {
+					001EDC0F2DF1028F001EBFE6 = {
+						CreatedOnToolsVersion = 16.3;
+					};
+					001EDC1C2DF10291001EBFE6 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = 001EDC0F2DF1028F001EBFE6;
+					};
+					001EDC262DF10291001EBFE6 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = 001EDC0F2DF1028F001EBFE6;
+					};
+				};
+			};
+			buildConfigurationList = 001EDC0B2DF1028F001EBFE6 /* Build configuration list for PBXProject "Pneumatactors_App" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 001EDC072DF1028F001EBFE6;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 001EDC112DF1028F001EBFE6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				001EDC0F2DF1028F001EBFE6 /* Pneumatactors_App */,
+				001EDC1C2DF10291001EBFE6 /* Pneumatactors_AppTests */,
+				001EDC262DF10291001EBFE6 /* Pneumatactors_AppUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		001EDC0E2DF1028F001EBFE6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		001EDC1B2DF10291001EBFE6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		001EDC252DF10291001EBFE6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		001EDC0C2DF1028F001EBFE6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		001EDC192DF10291001EBFE6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		001EDC232DF10291001EBFE6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		001EDC1F2DF10291001EBFE6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 001EDC0F2DF1028F001EBFE6 /* Pneumatactors_App */;
+			targetProxy = 001EDC1E2DF10291001EBFE6 /* PBXContainerItemProxy */;
+		};
+		001EDC292DF10291001EBFE6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 001EDC0F2DF1028F001EBFE6 /* Pneumatactors_App */;
+			targetProxy = 001EDC282DF10291001EBFE6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		001EDC2F2DF10291001EBFE6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		001EDC302DF10291001EBFE6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		001EDC322DF10291001EBFE6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XNK55ZA7WJ;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Pneumatactors-App-Info.plist";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "HAMR.Pneumatactors-App";
+				PRODUCT_NAME = Pneumatactors;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		001EDC332DF10291001EBFE6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XNK55ZA7WJ;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Pneumatactors-App-Info.plist";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "HAMR.Pneumatactors-App";
+				PRODUCT_NAME = Pneumatactors;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		001EDC352DF10291001EBFE6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "HAMR.Pneumatactors-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pneumatactors_App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Pneumatactors_App";
+			};
+			name = Debug;
+		};
+		001EDC362DF10291001EBFE6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "HAMR.Pneumatactors-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pneumatactors_App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Pneumatactors_App";
+			};
+			name = Release;
+		};
+		001EDC382DF10291001EBFE6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "HAMR.Pneumatactors-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Pneumatactors_App;
+			};
+			name = Debug;
+		};
+		001EDC392DF10291001EBFE6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "HAMR.Pneumatactors-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Pneumatactors_App;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		001EDC0B2DF1028F001EBFE6 /* Build configuration list for PBXProject "Pneumatactors_App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				001EDC2F2DF10291001EBFE6 /* Debug */,
+				001EDC302DF10291001EBFE6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		001EDC312DF10291001EBFE6 /* Build configuration list for PBXNativeTarget "Pneumatactors_App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				001EDC322DF10291001EBFE6 /* Debug */,
+				001EDC332DF10291001EBFE6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		001EDC342DF10291001EBFE6 /* Build configuration list for PBXNativeTarget "Pneumatactors_AppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				001EDC352DF10291001EBFE6 /* Debug */,
+				001EDC362DF10291001EBFE6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		001EDC372DF10291001EBFE6 /* Build configuration list for PBXNativeTarget "Pneumatactors_AppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				001EDC382DF10291001EBFE6 /* Debug */,
+				001EDC392DF10291001EBFE6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 001EDC082DF1028F001EBFE6 /* Project object */;
+}
